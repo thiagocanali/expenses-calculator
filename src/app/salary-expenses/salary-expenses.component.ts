@@ -20,43 +20,54 @@ export class SalaryExpensesComponent {
 
   constructor(private salaryExpensesService: SalaryExpensesService) {}
 
-  addData() {
-    const totalExpenses = this.expenses.reduce((acc, expense) => acc + expense.value, 0);
-    const remaining = (this.salary || 0) - totalExpenses;
+  addData(): void {
+    const totalExpenses = this.calculateTotalExpenses();
+    const remaining = this.calculateRemainingSalary(totalExpenses);
     this.salaryExpensesService.addMonthData(this.month, this.salary || 0, this.expenses, remaining);
     this.resetForm();
   }
 
-  addExpense() {
-    if (this.expenseTitle && this.expenseValue !== null) {
-      this.expenses.push({ title: this.expenseTitle, value: this.expenseValue });
-      this.expenseTitle = '';
-      this.expenseValue = 0;
+  addExpense(): void {
+    if (this.isExpenseValid()) {
+      this.expenses.push({ title: this.expenseTitle, value: this.expenseValue! });
+      this.resetExpenseFields();
     }
   }
 
-  resetForm() {
+  resetForm(): void {
     this.month = '';
     this.salary = 0;
-    this.expenseTitle = '';
-    this.expenseValue = 0;
+    this.resetExpenseFields();
     this.expenses = [];
   }
 
-  clearField(field: 'salary' | 'expenseValue') {
-    if (field === 'salary' && this.salary === 0) {
-      this.salary = null;
-    } else if (field === 'expenseValue' && this.expenseValue === 0) {
-      this.expenseValue = null;
+  resetExpenseFields(): void {
+    this.expenseTitle = '';
+    this.expenseValue = 0;
+  }
+
+  clearField(field: 'salary' | 'expenseValue'): void {
+    if (this[field] === 0) {
+      this[field] = null;
     }
   }
 
-  restoreField(field: 'salary' | 'expenseValue') {
-    if (field === 'salary' && this.salary === null) {
-      this.salary = 0;
-    } else if (field === 'expenseValue' && this.expenseValue === null) {
-      this.expenseValue = 0;
+  restoreField(field: 'salary' | 'expenseValue'): void {
+    if (this[field] === null) {
+      this[field] = 0;
     }
+  }
+
+  private calculateTotalExpenses(): number {
+    return this.expenses.reduce((acc, expense) => acc + expense.value, 0);
+  }
+
+  private calculateRemainingSalary(totalExpenses: number): number {
+    return (this.salary || 0) - totalExpenses;
+  }
+
+  private isExpenseValid(): boolean {
+    return this.expenseTitle !== '' && this.expenseValue !== null;
   }
 
   get data() {

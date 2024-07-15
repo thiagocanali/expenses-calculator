@@ -16,13 +16,13 @@ interface MonthData {
   providedIn: 'root'
 })
 export class SalaryExpensesService {
-  private data: MonthData[] = [];
+  private monthData: MonthData[] = [];
 
-  addMonthData(month: string, salary: number, expenses: Expense[], remaining: number) {
-    this.data.push({ month, salary, expenses, remaining });
+  addMonthData(month: string, salary: number, expenses: Expense[], remaining: number): void {
+    this.monthData.push({ month, salary, expenses, remaining });
   }
 
-  getMonthData() {
-    return this.data;
+  getMonthData(): MonthData[] {
+    return this.monthData;
   }
 }
