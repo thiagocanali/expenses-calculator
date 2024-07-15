@@ -1,0 +1,57 @@
+<div class="container">
+    <h2>Registro de Salário e Despesas</h2>
+    <form (ngSubmit)="addData()" class="form">
+      <div class="form-group">
+        <label for="month">Mês:</label>
+        <input type="text" id="month" [(ngModel)]="month" name="month" required class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="salary">Salário:</label>
+        <input type="number" id="salary" [(ngModel)]="salary" name="salary" required class="form-control"
+               (focus)="clearField('salary')" (blur)="restoreField('salary')">
+      </div>
+      <div class="form-group">
+        <label for="expenseTitle">Título da Despesa:</label>
+        <input type="text" id="expenseTitle" [(ngModel)]="expenseTitle" name="expenseTitle" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="expenseValue">Valor da Despesa:</label>
+        <input type="number" id="expenseValue" [(ngModel)]="expenseValue" name="expenseValue" class="form-control"
+               (focus)="clearField('expenseValue')" (blur)="restoreField('expenseValue')">
+      </div>
+      <button type="button" class="btn btn-secondary" (click)="addExpense()">Adicionar Despesa</button>
+      <ul class="expenses-list">
+        <li *ngFor="let expense of expenses">
+          {{ expense.title }} - {{ expense.value | currency:'BRL' }}
+        </li>
+      </ul>
+      <button type="submit" class="btn btn-primary">Adicionar Salário e Despesas</button>
+    </form>
+  
+    <h3>Dados Registrados</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Mês</th>
+          <th>Salário</th>
+          <th>Despesas</th>
+          <th>Saldo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of data">
+          <td>{{ item.month }}</td>
+          <td>{{ item.salary | currency:'BRL' }}</td>
+          <td>
+            <ul>
+              <li *ngFor="let expense of item.expenses">
+                {{ expense.title }} - {{ expense.value | currency:'BRL' }}
+              </li>
+            </ul>
+          </td>
+          <td>{{ item.remaining | currency:'BRL' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
