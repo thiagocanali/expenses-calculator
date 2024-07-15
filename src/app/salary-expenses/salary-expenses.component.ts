@@ -21,10 +21,12 @@ export class SalaryExpensesComponent {
   constructor(private salaryExpensesService: SalaryExpensesService) {}
 
   addData(): void {
-    const totalExpenses = this.calculateTotalExpenses();
-    const remaining = this.calculateRemainingSalary(totalExpenses);
-    this.salaryExpensesService.addMonthData(this.month, this.salary || 0, this.expenses, remaining);
-    this.resetForm();
+    if (this.salary !== null && this.month) {
+      const totalExpenses = this.calculateTotalExpenses();
+      const remaining = this.calculateRemainingSalary(totalExpenses);
+      this.salaryExpensesService.addMonthData(this.month, this.salary, this.expenses, remaining);
+      this.resetForm();
+    }
   }
 
   addExpense(): void {
